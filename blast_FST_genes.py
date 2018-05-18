@@ -1,14 +1,14 @@
 #List all proteins from T5
 filename = "T5_st0"
-folder = "D:\\2016_2020-Doctorat-RAMIREZ_Luis\\001-Bioinformatic_analysis\\Blast\\"
+folder = " " #write your directory path here
 gb_filename = "%s%s.gb" %(folder, filename)
 faa_filename = "%s%s_proteins.faa" %(folder, filename)
 output_prot = "%s%s.csv" %(folder, filename)
 csv_file = "%s%s_statistics.csv" %(folder, filename)
-fig_output = "%s%s_fig.pdf" %(folder, filename)
+fig_output1 = "%s%s_fig1.pdf" %(folder, filename)
+fig_output2 = "%s%s_fig2.pdf" %(folder, filename)
 
-"""
-#Import Biopython module SeqIO
+Import Biopython module SeqIO
 from Bio import SeqIO
 input_handle = open(gb_filename, 'r')
 output_handle = open(faa_filename, 'w')
@@ -37,37 +37,62 @@ output_handle.close()
 
 #blast against the database by using a -remote flag
 import os
-blast = 'tblastn -query {} -db nr -remote -out {} -evalue \
-1e-3 -matrix BLOSUM80 -outfmt "10 qseqid sseqid evalue bitscore"'.format(faa_filename, output_prot)
+blast = 'tblastn -query {} -db nr -remote -out {} -evalue 1e-3 -matrix BLOSUM80 -outfmt "10 qseqid sseqid evalue bitscore"'.format(faa_filename, output_prot)
 os.system(blast)
 
-#To try directly on the command prompt
-
-#tblastn -query D:\2016_2020-Doctorat-RAMIREZ_Luis\001-Bioinformatic_analysis\Blast\FST_proteins.faa -db nr -remote -out D:\2016_2020-Doctorat-RAMIREZ_Luis\001-Bioinformatic_analysis\Blast\FST_proteins.csv -evalue 1e-3 -matrix BLOSUM80 -outfmt "10 qseqid sseqid evalue bitscore"
-"""
 import pandas as pd
+import matplotlib.pyplot as plt
 
-#read to csv
-data_csv = pd.read_csv(output_prot, header=None)
+data_csv = pd.read_csv(output_prot, header=None) #read to csv
+data_csv = data_csv.drop_duplicates(subset=[0, 1]) #Drop the duplicated data
+FST_genes_counts = data_csv[0].value_counts().to_dict() #get the counts of each gene
+FST_genes_list= [key for key in dict(data_csv[0].value_counts())] #get a sorted list of genes
+FST_genes_list = sorted(FST_genes_list, key=lambda qey: qey.split('_')[1])
+#labellist = [i[:-4] for i in FST_genes_list]
+labellist = [x.split('_')[0][-3::] for x in FST_genes_list]
 
-#Drop the duplicated data
-data_csv = data_csv.drop_duplicates(subset=[0, 1])
+w = ((data_csv[0] == 'A1_004') | (data_csv[0] == 'A2_006')) #Entries matching genes A1 and A2
 
-#get the counts of each gene
-genes = data_csv[0].value_counts()
+T5_like_dict = dict((data_csv[w])[1].value_counts()) #Separate the and save the names of those entries
+T5_virus = [key for key in T5_like_dict if T5_like_dict[key]> 1] #list the subjects with A1 and A2
+T5virus_genes = data_csv[(data_csv[1].isin(T5_virus))]
 
-#Separate the ones that contain A1 or A2
-T5_like = data_csv[(data_csv[0]=='A1_004') | (data_csv[0]=='A2_006')]
-
-#save the names
-T5_like_dict = dict(T5_like[1].value_counts())
-
-#select the subjects that appear with both A1 and A2, and make a list
-T5_like_list = [key for key in T5_like_dict if T5_like_dict[key]> 1]
-
-#retrieve the number of matches in the dataframe for the names appearing in the list 
-most_common_genes = data_csv[(data_csv[1].isin(T5_like_list))]
+#T5virus_genes = data_csv[(data_csv[1].isin(T5_virus) & ~(w))]
+#genes that appear altogether with A1 and A2
+#T5virus_genes = data_csv[(data_csv[1].isin(T5_virus) & ~((data_csv[0] == 'A1_004') | (data_csv[0] == 'A2_006')))]
+T5virus_genes_dict = dict(T5virus_genes[0].value_counts())
 
 #Plot and save as pdf
-ax = most_common_genes[0].value_counts().plot(kind='bar')
-ax.get_figure().savefig(fig_output, format='pdf', bbox_inches='tight')
+y_pos = [y for y in range(len(FST_genes_list))]
+x_pos = []
+x_pos2 = []
+
+#Individual Frequency
+fig, ax = plt.subplots()
+for item in FST_genes_list:
+    x_pos2.append(FST_genes_counts[item])
+d = ['red' if ((x=='A1_004')|(x=='A2_006')) else 'blue' for x in FST_genes_list]
+ax.barh(y_pos, x_pos2, align='center', color = d)
+ax.set_yticks(y_pos)
+ax.set_yticklabels(labellist)
+ax.invert_yaxis()
+ax.set_title("FST genes frequency of matches")
+plt.ylabel('FST Genes')
+plt.show()
+#ax.get_figure().savefig(fig_output2, format='pdf', bbox_inches='tight')
+
+#Frequency altogether with A1 and A2
+fig, ax = plt.subplots()
+for item in FST_genes_list:
+    x_pos.append(T5virus_genes_dict[item])
+    
+c = ['red' if ((x=='A1_004')|(x=='A2_006')) else ('green' if (((x=='T5p002_002')|(x=='T5p005_005')|(x=='T5p007_007')|(x=='T5p010_010')|(x=='T5p013_013')|(x=='T5p014_014'))) else 'blue' )for x in FST_genes_list]
+#c = ['red' if (x==max(x_pos)) else ('green' if (x>20) else 'blue') for x in x_pos]
+ax.barh(y_pos, x_pos, align='center', color= c)
+ax.set_yticks(y_pos)
+ax.set_yticklabels(labellist)
+ax.invert_yaxis()
+ax.set_title("FST genes frequency in T5 viruses")
+plt.ylabel('FST Genes')
+plt.show()
+#ax.get_figure().savefig(fig_output1, format='pdf', bbox_inches='tight')
