@@ -4,7 +4,7 @@ Install the sangerseq library
 source("https://bioconductor.org/biocLite.R")
 biocLite("sangerseqR", dependencies = TRUE)
 ```
-if it lacks a library type: install.packages("package", repos = c("http://rstudio.org/_packages","http://cran.rstudio.com"))
+if it lacks a library type: `install.packages("package", repos = c("http://rstudio.org/_packages","http://cran.rstudio.com"))`
 
 Import the tools
 ```
