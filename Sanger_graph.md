@@ -1,4 +1,4 @@
-#Sanger_graph
+# Sanger_graph
 Install the sangerseq library 
 ```
 source("https://bioconductor.org/biocLite.R")
