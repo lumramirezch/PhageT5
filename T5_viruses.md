@@ -20,10 +20,28 @@ $ mkdir ~/Blast/FST/T5viruses/ ~/Blast/FST/T5viruses_faa ; cd ~/Blast ; python f
 Result: when used the T5st0 FST region as seed: 122 viruses containing at least one T5st0 homologous gene.
 All genomes not belonging to phages, or only contigs were not considered. 
 
+## Cluster homologous gene families
 Install the [get_homologues script](https://github.com/eead-csic-compbio/get_homologues/) to find orthologous genes 
 and [IQtree](http://www.iqtree.org/) to build the tree.
+
+Specify the input directory (`-d`)
+- Clustering algorithm: COGtriangles (`-G`)
+- Reference genome (`-r`): T5st0-Escherichia.gb
+- Report all the clusters (`-t 0`) and the average % sequence identity values among pairs of genomes (`-A`)
+- Request a pan- and core-genome analysis of the input genomes (`-c`)
 ```
-$ cd ~/get_homologues ; ./get_homologues.pl -d ~/Blast/FST/T5viruses -M -r "T5st0-Escherichia.gb" -t 0 -c -A && mkdir ~/Blast/FST/GB
-$ cd ~/get_homologues ; ./compare_clusters.pl -o ~/Blast/FST/GB -t 0 -m -s -d ~/get_homologues/T5viruses_homologues/T5st0-Escherichia_f0_0taxa_algOMCL_e0_ 
+$ cd ~/get_homologues ; ./get_homologues.pl -d ~/Blast/FST/T5viruses -G -r "T5st0-Escherichia.gb" -t 0 -c -A
+```
+
+## Build a pangenome matrix
+Specify the input (`-d`) and output (`-o`) directories
+- Produce intersection pangenome matrices (`-m`)
+- Produce a parsimony-based pangenomic tree (`-T`)
+```
+$ mkdir ~/Blast/FST/T5viruses_Intersection ; ./compare_clusters.pl -d ~/get_homologues/T5viruses_homologues/T5st0-Escherichia_f0_0taxa_algCOG_e0_ -o ~/Blast/FST/T5viruses_Intersection -t 0 -m  
+```
+
+
+```
 $ iqtree -s ~/Blast/FST/GB/pangenome_matrix_t0_s.fasta -alrt 1000 -bb 1000 
 ```
