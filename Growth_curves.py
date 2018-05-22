@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 """
 Used for parsing Tecan Infinite M200 time series read
 Requirement:
