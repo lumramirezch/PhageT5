@@ -38,10 +38,18 @@ Specify the input (`-d`) and output (`-o`) directories
 - Produce intersection pangenome matrices (`-m`)
 - Produce a parsimony-based pangenomic tree (`-T`)
 ```
-$ mkdir ~/Blast/FST/T5viruses_Intersection ; ./compare_clusters.pl -d ~/get_homologues/T5viruses_homologues/T5st0-Escherichia_f0_0taxa_algCOG_e0_ -o ~/Blast/FST/T5viruses_Intersection -t 0 -m  
+$ ./compare_clusters.pl -d ~/get_homologues/T5viruses_homologues/T5st0-Escherichia_f0_0taxa_algCOG_e0_ -o ~/Blast/FST/T5viruses_Intersection -t 0 -m  
 ```
-
-
+## Build a pangenome matrix
+Specify the input (`-d`) and output (`-o`) directories
+- Produce intersection pangenome matrices (`-m`)
 ```
-$ iqtree -s ~/Blast/FST/GB/pangenome_matrix_t0_s.fasta -alrt 1000 -bb 1000 
+$ ./compare_clusters.pl -d ~/get_homologues/T5viruses_homologues/T5st0-Escherichia_f0_0taxa_algCOG_e0_ -o ~/Blast/FST/T5viruses_Intersection -t 0 -m
 ```
+## Build a ML Tree
+- 1000 SH-aLRT test (`-alrt`) 
+- 1000 bootstraps (`-bb`)
+```
+$ iqtree -s ~/Blast/FST/T5viruses_Intersection/pangenome_matrix_t0.fasta -alrt 1000 -bb 1000 
+```
+Finally, you can use [iTOL](https://itol.embl.de/) to visualize the tree
