@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 #List all proteins from T5
 filename = "T5_st0"
 folder = " " #write your directory path here
