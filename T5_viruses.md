@@ -36,16 +36,10 @@ $ cd ~/get_homologues ; ./get_homologues.pl -d ~/Blast/FST/T5viruses -G -r "T5st
 ## Build a pangenome matrix
 Specify the input (`-d`) and output (`-o`) directories
 - Produce intersection pangenome matrices (`-m`)
-- Produce a parsimony-based pangenomic tree (`-T`)
-```
-$ ./compare_clusters.pl -d ~/get_homologues/T5viruses_homologues/T5st0-Escherichia_f0_0taxa_algCOG_e0_ -o ~/Blast/FST/T5viruses_Intersection -t 0 -m  
-```
-## Build a pangenome matrix
-Specify the input (`-d`) and output (`-o`) directories
-- Produce intersection pangenome matrices (`-m`)
 ```
 $ ./compare_clusters.pl -d ~/get_homologues/T5viruses_homologues/T5st0-Escherichia_f0_0taxa_algCOG_e0_ -o ~/Blast/FST/T5viruses_Intersection -t 0 -m
 ```
+
 ## Build a ML Tree
 - 1000 SH-aLRT test (`-alrt`) 
 - 1000 bootstraps (`-bb`)
