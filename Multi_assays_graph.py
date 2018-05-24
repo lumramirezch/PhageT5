@@ -5,32 +5,53 @@ Created on Tue Oct 10 10:36:47 2017
 @author: lm.ramirez-chamorro
 """
 
-
-
-#Folder Name, remember to add always two slashes
-Folder="C:\\Users\\leo\\Desktop\\Thèse\\Résultats\\TECAN\\"
-subfolder = "230518\\"
-#File Name, without the extension
-filename1 = '230518_A2'
-filename2 = None
-filename3 = None
-strain = 'BL21' #Construction
-#Range to be visualized
-Hour_start = 0
-Hour_end = 40
-#List of wells in the file 1, Repressed and Induced
-file1_Repr = ['B2', 'B3', 'B4', 'B5', 'B6']  #Repressed
-file1_Ind = ['C2', 'C3', 'C4', 'C5', 'C6']    #Induced
-#Change if not the same arrangement		
-
-##############################################################################
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 from pathlib import Path
+import os
+import sys
+
+#Folder Name, remember to add always two slashes
+Folder="P:\\Equipes\\T5PHAG\\Programmes Python\\Tecan\\"
+subfolder = input("Subfolder name? ")+"\\"
+#File Name, without the extension
+filename1 = input("Excel File n°1 name? (without .xlsx) ")
+#Check if the file exists
+my_file = Path("%sexcel files\\%s.xlsx"%(Folder,filename1))
+if my_file.is_file() == False:
+	print("Error: the file does not exist. Please check the spelling.")
+	os.system("pause")
+	sys.exit()
+filename2 = input("Excel File n°2 name? (leave blank if no file 2) ")
+#Check if the file exists
+my_file = Path("%sexcel files\\%s.xlsx"%(Folder,filename2))
+if my_file.is_file() == False and filename2 is not "":
+	print("Error: the file does not exist. Please check the spelling.")
+	os.system("pause")
+	sys.exit()
+#We don't want the user to give a file n°3 if he didn't give a file n°2
+if filename2 is not "":
+	filename3 = input("Excel File n°3 name? (leave blank if no file 3) ")
+	#Check if the file exists
+	my_file = Path("%sexcel files\\%s.xlsx"%(Folder,filename3))
+	if my_file.is_file() == False and filename3 is not "":
+		print("Error: the file does not exist. Please check the spelling.")
+		os.system("pause")
+		sys.exit()
+strain = input("Name of the main label? ") #Construction
+file = input("Name of the final file? ")
+#Range to be visualized
+Hour_start = 0
+Hour_end = 40
+#List of wells in the file 1, Repressed and Induced
+file1_Repr = input("List of wells with repressor (All files will use the same wells. Example format: A1,A2,A3) ").split(",") #split(",") converts string separated by a comma to list
+file1_Ind = input("List of wells with inductor (All files will use the same wells. Example format: A1,A2,A3) ").split(",")
+
+##############################################################################
 
 def Data_frame_generator(filename, folder):
-    data_xls = pd.read_excel('%s%s.xlsx' %(Folder, filename), 'Sheet0', header=35)
+    data_xls = pd.read_excel('%sexcel files\\%s.xlsx' %(Folder, filename), 'Sheet0', header=35)
     data_xls = data_xls.set_index('Cycle Nr.').T
     data_xls['Time [s]'] = data_xls['Time [s]'].astype(float) /3600
     data_xls=data_xls.iloc[Hour_start:Hour_end,:]
@@ -38,11 +59,11 @@ def Data_frame_generator(filename, folder):
     return data_xls
 
 csvT1 = Data_frame_generator(filename1, Folder)
-if filename2 is not None:
+if filename2 is not "":
 	file2_Repr = file1_Repr
 	file2_Ind = file1_Ind
 	csvT2 = Data_frame_generator(filename2, Folder)
-	if filename3 is not None:
+	if filename3 is not "":
 		file3_Repr = file1_Repr
 		file3_Ind = file1_Ind
 		csvT3 = Data_frame_generator(filename3, Folder)
@@ -88,7 +109,11 @@ ax.set_ylabel('OD600')
 ax.set_ylim([0,0.8]) ; ax.set_xlim([0,6.5])
 
 #plt.show()
-fig_output = "%s%s%s.pdf"%(Folder, subfolder, strain)
+fig_output = "%sresults\\%s%s.pdf"%(Folder, subfolder, file)
+
+#If the folder does not exist, we create it
+if not os.path.exists("%sresults\\%s"%(Folder, subfolder)):
+    os.makedirs("%sresults\\%s"%(Folder, subfolder))
 
 my_file = Path(fig_output)
 if my_file.is_file():
