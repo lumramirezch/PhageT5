@@ -9,6 +9,7 @@ Created on Tue Oct 10 10:36:47 2017
 
 #Folder Name, remember to add always two slashes
 Folder="C:\\Users\\leo\\Desktop\\Thèse\\Résultats\\TECAN\\"
+subfolder = "230518\\"
 #File Name, without the extension
 filename1 = '230518_A2'
 filename2 = None
@@ -26,6 +27,7 @@ file1_Ind = ['C2', 'C3', 'C4', 'C5', 'C6']    #Induced
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+from pathlib import Path
 
 def Data_frame_generator(filename, folder):
     data_xls = pd.read_excel('%s%s.xlsx' %(Folder, filename), 'Sheet0', header=35)
@@ -85,6 +87,15 @@ ax.set_xlabel('Time(Hours)')
 ax.set_ylabel('OD600')
 ax.set_ylim([0,0.8]) ; ax.set_xlim([0,6.5])
 
-plt.show()
-"""fig_output = "%s_%s_%s_%s-%s.pdf"%(Folder, filename1[:10], filename2[4:10], filename3[4:10], strain)
-ax.get_figure().savefig(fig_output, format='pdf', bbox_inches='tight')"""
+#plt.show()
+fig_output = "%s%s%s.pdf"%(Folder, subfolder, strain)
+
+my_file = Path(fig_output)
+if my_file.is_file():
+    # exists
+	overwrite = input("File already exists. Overwrite? (y/n) ")
+	if overwrite == "y" or overwrite == "Y":
+		ax.get_figure().savefig(fig_output, format='pdf', bbox_inches='tight')
+else:
+    # doesn't exist
+	ax.get_figure().savefig(fig_output, format='pdf', bbox_inches='tight')
