@@ -2,7 +2,7 @@
 """
 Created on Tue Oct 10 10:36:47 2017
 
-@author: lm.ramirez-chamorro
+@authors: lm.ramirez-chamorro and Léo Zangelmi
 """
 
 import pandas as pd
@@ -123,4 +123,4 @@ if my_file.is_file():
 		ax.get_figure().savefig(fig_output, format='pdf', bbox_inches='tight')
 else:
     # doesn't exist
-	ax.get_figure().savefig(fig_output, format='pdf', bbox_inches='tight')
+
