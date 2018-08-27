@@ -123,4 +123,4 @@ if my_file.is_file():
 		ax.get_figure().savefig(fig_output, format='pdf', bbox_inches='tight')
 else:
     # doesn't exist
-	ax.get_figure().savefig(fig_output, format='pdf', bbox_inches='tight')
+
