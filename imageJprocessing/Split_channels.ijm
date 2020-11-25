@@ -1,19 +1,26 @@
 //Macro Split_channels.ijm
-// Number and Name of the gene
-gene="18-A1A2"
+// Copy the directory tree with the following command on a linux-based system:
+// rsync -a -f"+ */" -f"- *" path/to/source/ path/to/destination/
+/*
+ * This script will help you to split recursively czi files  
+ * as a single tiff file per channel.
+ */
+//Path to the input and output
+wfolder1 = "C:/004-Results/004-Microscopy/2020070301_03-OR63-T5-timecourse/" ; 
+wfolder2I = "Data" ;
+wfolder2O = "split" ;
+wfolder3 = "/202007" ;
+gene="03-T30-05-amA2" ;
 
 // This is the input, images in czi 
-directory = "./2020090301-OR63-ectopic-140min/Data/20200903-ectopic-140min-"+gene+"/";
+directory = wfolder1 + wfolder2I + wfolder3 + gene + "/";
 
 // Folder for the output
-outputDirectory = "./2020090301-OR63-ectopic-140min/split/20200903-ectopic-140min-"+gene+"/";
+outputDirectory = wfolder1 + wfolder2O + wfolder3 + gene+"/";
 
+// Declare variables
+oneFilePerSlice = true;
 fileList = getFileList(directory);
-
-// directory = getDirectory(input);
-fileList = getFileList(directory);
-
-// outputDirectory = getDirectory(output);
 
 run("Bio-Formats Macro Extensions");
 setBatchMode(true);
