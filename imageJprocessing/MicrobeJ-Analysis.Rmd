@@ -2,9 +2,7 @@
 title: "20200923-Infection_Microscopy"
 author: "Ramirez_Luis"
 date: "23/09/2020"
-output:
-  md_document:
-    variant: markdown_github
+output: md_document
 ---
 
 ```{r global-options, include=TRUE}
