@@ -3,8 +3,9 @@
 ## Orthofinder_script
 ## Author: Luis Ramirez
 ## Affiliation: I2BC
-## Aim: A workflow for essential phage genes comparison.
+## Aim: Conservation of genes in a taxonomic clade
 ## Date: 2019111401
+## usage: ./Orthofinder_script.sh -a "path/to/file/"
 ##------------------------------------------------------------------------------
 
 while getopts a: name
