@@ -104,6 +104,8 @@ g <- do.call(grid.arrange, c(p,ncol=8))
 #ggsave("./Maxima1-orthogonal.png", g, width = 16,  height = 5,  units = "cm" )
 ```
 
+![](./images/Maxima1-orthogonal.png)
+
 \#Distribution of Parameters
 
 ``` r
@@ -204,3 +206,5 @@ p.plot
 ``` r
 #ggsave("./pVal-TukeyHSD-T10.png", p.plot, width = 20,  height = 10,  units = "cm" )
 ```
+
+![](./images/pVal-TukeyHSD-T10.png)
