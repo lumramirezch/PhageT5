@@ -1,5 +1,6 @@
 VirulenceIndex
 ================
+Ramirez\_Luis
 
 ``` r
 # functions: melt
@@ -33,7 +34,9 @@ to produce a local virulence of 0.5 (\(MV_{50}\)) - Virulence Index
 
 ![](./images/Principle.png)
 
-The first step consists on reading the .csv file:
+Data must be collected in the following manner:
+![](./images/csvfile.png) The first step consists on reading the .csv
+file:
 
 ``` r
 data1 = read.csv("Infection_Mutants2.csv", header=FALSE, sep=",", check.names=FALSE)
